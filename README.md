@@ -1,0 +1,1 @@
+SimpleSAMLphp Instagram Authentication Source Module
