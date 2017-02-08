@@ -106,9 +106,15 @@ class sspmod_authinstagram_Auth_Source_Instagram extends SimpleSAML_Auth_Source 
 
         SimpleSAML\Logger::debug('authinstagram : access token endpoint response=' . var_export($response, TRUE));
 
-        // TODO attributes
+        // TODO check for access token
+
+        // attributes
         $attributes = array();
-        $attributes['foo'] = array('bar');
+        foreach ($response['user'] as $key => $value) {
+            if (is_string($value)) {
+                $attributes['instagram.' . $key] = array((string)$value);
+            }
+        }
         $state['Attributes'] = $attributes;
         SimpleSAML\Logger::debug('authinstagram : attributes: ' . implode(", ", array_keys($attributes)));
 
