@@ -1,0 +1,13 @@
+{
+    "name": "cirrusidentity/simplesamlphp-module-authinstagram",
+    "description": "SSP Module for Instagram as authentication source",
+    "type": "simplesamlphp-module",
+    "require": {
+        "simplesamlphp/composer-module-installer": "^1.1"
+    },
+    "require-dev": {
+        "simplesamlphp/simplesamlphp": "1.14",
+        "phpunit/phpunit": "5.3.*",
+        "facebook/webdriver": "1.3.*"
+    }
+}
