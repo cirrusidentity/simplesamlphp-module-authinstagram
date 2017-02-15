@@ -6,6 +6,18 @@ use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 
+/**
+ * Test authentication to Instagram.
+ *
+ * The Selenium Standalone Server and Chrome or Gecko WebDrivers are required :
+ *  http://www.seleniumhq.org/download/
+ *  https://github.com/mozilla/geckodriver/releases/
+ *  https://sites.google.com/a/chromium.org/chromedriver/
+ *
+ * Run the Selenium server with something like :
+ *  java -Dwebdriver.gecko.driver="/opt/webdriver/geckodriver" -Dwebdriver.chrome.driver="/opt/webdriver/chromedriver" -jar selenium-server-standalone-3.0.1.jar
+ *
+ */
 class Test_sspmod_authinstagram_Auth_Source_Instagram extends PHPUnit_Framework_TestCase {
 
     public $host = 'http://localhost:4444/wd/hub'; // this is the default
