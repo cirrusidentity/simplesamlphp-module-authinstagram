@@ -60,7 +60,7 @@ class sspmod_authinstagram_Auth_Source_Instagram extends SimpleSAML_Auth_Source 
         // TODO urlencode redirect_uri and state
         $authorizeURLParams = array(
             'client_id' => $this->client_id,
-            'redirect_uri' => SimpleSAML\Module::getModuleURL('authinstagram/linkback.php'),
+            'redirect_uri' => SimpleSAML_Module::getModuleURL('authinstagram/linkback.php'),
             'response_type' => 'code',
             'state' => $stateID,
         );
@@ -89,7 +89,7 @@ class sspmod_authinstagram_Auth_Source_Instagram extends SimpleSAML_Auth_Source 
         $postData = 'client_id=' . urlencode($this->client_id)
             . '&client_secret=' . urlencode($this->client_secret)
             . '&grant_type=authorization_code'
-            . '&redirect_uri=' . SimpleSAML\Module::getModuleURL('authinstagram/linkback.php')
+            . '&redirect_uri=' . SimpleSAML_Module::getModuleURL('authinstagram/linkback.php')
             . '&code=' . urlencode($state['authinstagram:verification_code']);
 
         $context = array(
