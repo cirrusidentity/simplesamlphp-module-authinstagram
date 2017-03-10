@@ -4,7 +4,7 @@
  * Handle linkback() response from Instagram.
  */
 
-SimpleSAML\Logger::debug('authinstagram : linkback request=' . var_export($_REQUEST, TRUE));
+SimpleSAML_Logger::debug('authinstagram : linkback request=' . var_export($_REQUEST, TRUE));
 
 if (!array_key_exists('state', $_REQUEST) || empty($_REQUEST['state'])) {
     throw new SimpleSAML_Error_BadRequest('Missing state parameter on Instagram linkback endpoint.');
@@ -12,13 +12,13 @@ if (!array_key_exists('state', $_REQUEST) || empty($_REQUEST['state'])) {
 $state = SimpleSAML_Auth_State::loadState($_REQUEST['state'], sspmod_authinstagram_Auth_Source_Instagram::STAGE_INIT);
 
 if (array_key_exists('code', $_REQUEST)) {
-    SimpleSAML\Logger::debug('authinstagram : code=' . var_export($_REQUEST, TRUE));
+    SimpleSAML_Logger::debug('authinstagram : code=' . var_export($_REQUEST, TRUE));
 
     // good
     $state['authinstagram:verification_code'] = $_REQUEST['code'];
 
 } else {
-    SimpleSAML\Logger::debug('authinstagram : no code=' . var_export($_REQUEST, TRUE));
+    SimpleSAML_Logger::debug('authinstagram : no code=' . var_export($_REQUEST, TRUE));
 
     // TODO
 

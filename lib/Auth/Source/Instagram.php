@@ -48,14 +48,14 @@ class sspmod_authinstagram_Auth_Source_Instagram extends SimpleSAML_Auth_Source 
     public function authenticate(&$state) {
         assert('is_array($state)');
 
-        SimpleSAML\Logger::debug('authinstagram : start authentication');
+        SimpleSAML_Logger::debug('authinstagram : start authentication');
 
         // We are going to need the authId in order to retrieve this authentication source later
         $state[self::AUTHID] = $this->authId;
 
         $stateID = SimpleSAML_Auth_State::saveState($state, self::STAGE_INIT);
 
-        SimpleSAML\Logger::debug("authinstagram : saved state with stateID=$stateID");
+        SimpleSAML_Logger::debug("authinstagram : saved state with stateID=$stateID");
 
         // TODO urlencode redirect_uri and state
         $authorizeURLParams = array(
@@ -67,7 +67,7 @@ class sspmod_authinstagram_Auth_Source_Instagram extends SimpleSAML_Auth_Source 
 
         $authorizeURL = \SimpleSAML\Utils\HTTP::addURLParameters(self::INSTAGRAM_AUTHORIZATION_ENDPOINT, $authorizeURLParams);
 
-        SimpleSAML\Logger::debug("authinstagram : redirecting to authorizeURL=$authorizeURL");
+        SimpleSAML_Logger::debug("authinstagram : redirecting to authorizeURL=$authorizeURL");
 
         \SimpleSAML\Utils\HTTP::redirectTrustedURL($authorizeURL);
     }
@@ -81,7 +81,7 @@ class sspmod_authinstagram_Auth_Source_Instagram extends SimpleSAML_Auth_Source 
      */
     public function finalStep(&$state) {
 
-        SimpleSAML\Logger::debug('authinstagram : finish authentication state=' . var_export($state, TRUE));
+        SimpleSAML_Logger::debug('authinstagram : finish authentication state=' . var_export($state, TRUE));
 
         // retrieve Access Token
         // documentation at: TODO
@@ -104,7 +104,7 @@ class sspmod_authinstagram_Auth_Source_Instagram extends SimpleSAML_Auth_Source 
 
         $response = json_decode($result, true);
 
-        SimpleSAML\Logger::debug('authinstagram : access token endpoint response=' . var_export($response, TRUE));
+        SimpleSAML_Logger::debug('authinstagram : access token endpoint response=' . var_export($response, TRUE));
 
         // TODO check for access token
 
@@ -116,9 +116,9 @@ class sspmod_authinstagram_Auth_Source_Instagram extends SimpleSAML_Auth_Source 
             }
         }
         $state['Attributes'] = $attributes;
-        SimpleSAML\Logger::debug('authinstagram : attributes: ' . implode(", ", array_keys($attributes)));
+        SimpleSAML_Logger::debug('authinstagram : attributes: ' . implode(", ", array_keys($attributes)));
 
-        SimpleSAML\Logger::debug('authinstagram : finished authentication');
+        SimpleSAML_Logger::debug('authinstagram : finished authentication');
     }
 
 }
