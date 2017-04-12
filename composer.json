@@ -8,6 +8,7 @@
     "require-dev": {
         "simplesamlphp/simplesamlphp": "~1.14",
         "phpunit/phpunit": "5.3.*",
+        "codeception/aspect-mock": "*",
         "facebook/webdriver": "1.3.*"
     }
 }

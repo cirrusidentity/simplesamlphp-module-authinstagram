@@ -1,5 +1,7 @@
 <?php
 
+use AspectMock\Test as test;
+
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
@@ -30,6 +32,10 @@ class Test_sspmod_authinstagram_Auth_Source_Instagram extends PHPUnit_Framework_
 
     protected function setUp() {
         $this->module_config = SimpleSAML_Configuration::getConfig('module_authinstagram.php');
+    }
+
+    protected function tearDown() {
+        test::clean(); // remove all registered test doubles
     }
 
     public function createChromeDriver() {
@@ -65,5 +71,17 @@ class Test_sspmod_authinstagram_Auth_Source_Instagram extends PHPUnit_Framework_
         // $driver->quit();
     }
 
+    public function testAspectMockConfigured() {
+        // Ensure mocks can be configured for our service class
+        $linkDouble = test::double('sspmod_authinstagram_Auth_Source_Instagram', [
+            'authenticate' => null,
+        ]);
+        $info = ['AuthId' => 'instagram'];
+        $config = ['client_id' => 'example_id', 'client_secret' => 'example_secret'];
+        $state = ['SimpleSAML_Auth_Default.id' => 'authinstagram'];
+        (new sspmod_authinstagram_Auth_Source_Instagram($info, $config))->authenticate($state);
+        // Verify it was invoked with the expected argument
+        $linkDouble->verifyInvokedOnce('authenticate', [$state]);
+    }
 
 }
