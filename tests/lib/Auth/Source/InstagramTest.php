@@ -85,4 +85,26 @@ class Test_sspmod_authinstagram_Auth_Source_Instagram extends PHPUnit_Framework_
         $this->assertEquals('', $state['Attributes']['instagram.website'][0]);
     }
 
+
+    /**
+     * @expectedException SimpleSAML_Error_AuthSource
+     * @expectedExceptionMessage No access_token returned - cannot proceed
+     */
+    public function testFinalStepNoAccessToken() {
+        // Override fetch behavior
+        $fetch_result = '{}';
+        test::double('SimpleSAML\Utils\HTTP', ['fetch' => $fetch_result]);
+
+        $info = ['AuthId' => 'instagram'];
+        $config = ['client_id' => 'example_id', 'client_secret' => 'example_secret'];
+        $state = [
+            'SimpleSAML_Auth_Default.id' => 'authinstagram',
+            'authinstagram:verification_code' => 'c123456'
+        ];
+
+        $instagram = new sspmod_authinstagram_Auth_Source_Instagram($info, $config);
+
+        $instagram->finalStep($state);
+    }
+
 }

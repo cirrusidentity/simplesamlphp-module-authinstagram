@@ -41,7 +41,8 @@ class sspmod_authinstagram_Auth_Source_Instagram extends SimpleSAML_Auth_Source 
     }
 
     /**
-     * TODO
+     * Log-in using LiveID platform.
+     * Documentation at : https://www.instagram.com/developer/authentication/
      *
      * @param array $state
      */
@@ -73,8 +74,6 @@ class sspmod_authinstagram_Auth_Source_Instagram extends SimpleSAML_Auth_Source 
     }
 
     /**
-     * TODO
-     *
      * @param $state
      *
      * @throws Exception
@@ -106,7 +105,9 @@ class sspmod_authinstagram_Auth_Source_Instagram extends SimpleSAML_Auth_Source 
 
         SimpleSAML_Logger::debug('authinstagram : access token endpoint response=' . var_export($response, TRUE));
 
-        // TODO check for access token
+        if (!array_key_exists('access_token', $response)) {
+            throw new SimpleSAML_Error_AuthSource($this->authId, "No access_token returned - cannot proceed");
+        }
 
         // attributes
         $attributes = array();
