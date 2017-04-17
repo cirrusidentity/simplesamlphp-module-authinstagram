@@ -107,4 +107,25 @@ class Test_sspmod_authinstagram_Auth_Source_Instagram extends PHPUnit_Framework_
         $instagram->finalStep($state);
     }
 
+    /**
+     * @expectedException SimpleSAML_Error_AuthSource
+     * @expectedExceptionMessage An error occurred retrieving the access token
+     */
+    public function testFinalStepExpiredAccessToken() {
+        // Override fetch behavior
+        $fetch_result = '{"access_token": "at123456", "error":"some_error", "error_type":"OAuthAccessTokenException"}';
+        test::double('SimpleSAML\Utils\HTTP', ['fetch' => $fetch_result]);
+
+        $info = ['AuthId' => 'instagram'];
+        $config = ['client_id' => 'example_id', 'client_secret' => 'example_secret'];
+        $state = [
+            'SimpleSAML_Auth_Default.id' => 'authinstagram',
+            'authinstagram:verification_code' => 'c123456'
+        ];
+
+        $instagram = new sspmod_authinstagram_Auth_Source_Instagram($info, $config);
+
+        $instagram->finalStep($state);
+    }
+
 }

@@ -106,6 +106,10 @@ class sspmod_authinstagram_Auth_Source_Instagram extends SimpleSAML_Auth_Source 
             throw new SimpleSAML_Error_AuthSource($this->authId, "No access_token returned - cannot proceed");
         }
 
+        if(array_key_exists('error', $response)) {
+            throw new SimpleSAML_Error_AuthSource($this->authId, "An error occurred retrieving the access token");
+        }
+
         // attributes
         $attributes = array();
         foreach ($response['user'] as $key => $value) {
