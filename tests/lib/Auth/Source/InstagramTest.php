@@ -84,4 +84,31 @@ class Test_sspmod_authinstagram_Auth_Source_Instagram extends PHPUnit_Framework_
         $linkDouble->verifyInvokedOnce('authenticate', [$state]);
     }
 
+    public function testAuthenticate() {
+        // Override redirect behavior
+        test::double('SimpleSAML\Utils\HTTP', [
+            'redirectTrustedURL' => function () {
+                throw new sspmod_authinstagram_ArgumentCaptureException('redirect called', func_get_args());
+            }
+        ]);
+
+        $info = ['AuthId' => 'instagram'];
+        $config = ['client_id' => 'example_id', 'client_secret' => 'example_secret'];
+        $state = ['SimpleSAML_Auth_Default.id' => 'authinstagram'];
+
+        $instagram = new sspmod_authinstagram_Auth_Source_Instagram($info, $config);
+
+        try {
+            $instagram->authenticate($state);
+            $this->assertFalse(true, "Error should have been thrown by test double");
+        } catch (sspmod_authinstagram_ArgumentCaptureException $e) {
+            $this->assertEquals('redirect called', $e->getMessage());
+            $this->assertStringStartsWith(
+                'https://api.instagram.com/oauth/authorize?client_id=example_id&redirect_uri=http%3A%2F%2Flocalhost%2Fmodule.php%2Fauthinstagram%2Flinkback.php&response_type=code&state=',
+                $e->getArguments()[0],
+                "First argument should be the redirect url"
+            );
+        }
+    }
+
 }
