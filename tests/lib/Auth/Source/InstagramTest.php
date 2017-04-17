@@ -111,4 +111,28 @@ class Test_sspmod_authinstagram_Auth_Source_Instagram extends PHPUnit_Framework_
         }
     }
 
+    public function testFinalStep() {
+        // Override fetch behavior
+        $fetch_result = '{"access_token": "at123456", "user": {"id": "id123456", "username": "username", "profile_picture": "https://cdninstagram.com/t/123.jpg", "full_name": "My Name", "bio": "", "website": ""}}';
+        test::double('SimpleSAML\Utils\HTTP', ['fetch' => $fetch_result]);
+
+        $info = ['AuthId' => 'instagram'];
+        $config = ['client_id' => 'example_id', 'client_secret' => 'example_secret'];
+        $state = [
+            'SimpleSAML_Auth_Default.id' => 'authinstagram',
+            'authinstagram:verification_code' => 'c123456'
+        ];
+
+        $instagram = new sspmod_authinstagram_Auth_Source_Instagram($info, $config);
+
+        $instagram->finalStep($state);
+
+        $this->assertEquals('id123456', $state['Attributes']['instagram.id'][0]);
+        $this->assertEquals('username', $state['Attributes']['instagram.username'][0]);
+        $this->assertEquals('https://cdninstagram.com/t/123.jpg', $state['Attributes']['instagram.profile_picture'][0]);
+        $this->assertEquals('My Name', $state['Attributes']['instagram.full_name'][0]);
+        $this->assertEquals('', $state['Attributes']['instagram.bio'][0]);
+        $this->assertEquals('', $state['Attributes']['instagram.website'][0]);
+    }
+
 }
