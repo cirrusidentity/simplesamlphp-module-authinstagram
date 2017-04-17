@@ -58,7 +58,6 @@ class sspmod_authinstagram_Auth_Source_Instagram extends SimpleSAML_Auth_Source 
 
         SimpleSAML_Logger::debug("authinstagram : saved state with stateID=$stateID");
 
-        // TODO urlencode redirect_uri and state
         $authorizeURLParams = array(
             'client_id' => $this->client_id,
             'redirect_uri' => SimpleSAML_Module::getModuleURL('authinstagram/linkback.php'),
@@ -83,8 +82,6 @@ class sspmod_authinstagram_Auth_Source_Instagram extends SimpleSAML_Auth_Source 
         SimpleSAML_Logger::debug('authinstagram : finish authentication state=' . var_export($state, TRUE));
 
         // retrieve Access Token
-        // documentation at: TODO
-        // TODO urlencode redirect URI
         $postData = 'client_id=' . urlencode($this->client_id)
             . '&client_secret=' . urlencode($this->client_secret)
             . '&grant_type=authorization_code'
