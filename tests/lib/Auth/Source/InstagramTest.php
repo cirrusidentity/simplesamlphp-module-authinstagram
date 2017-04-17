@@ -13,10 +13,6 @@ class Test_sspmod_authinstagram_Auth_Source_Instagram extends PHPUnit_Framework_
         putenv('SIMPLESAMLPHP_CONFIG_DIR=' . dirname(dirname(dirname(__DIR__))) . '/config');
     }
 
-    protected function setUp() {
-        $this->module_config = SimpleSAML_Configuration::getConfig('module_authinstagram.php');
-    }
-
     protected function tearDown() {
         test::clean(); // remove all registered test doubles
     }
