@@ -11,19 +11,6 @@ if (!array_key_exists('state', $_REQUEST) || empty($_REQUEST['state'])) {
 }
 $state = SimpleSAML_Auth_State::loadState($_REQUEST['state'], sspmod_authinstagram_Auth_Source_Instagram::STAGE_INIT);
 
-if (array_key_exists('code', $_REQUEST)) {
-    SimpleSAML_Logger::debug('authinstagram : code=' . var_export($_REQUEST, TRUE));
-
-    // good
-    $state['authinstagram:verification_code'] = $_REQUEST['code'];
-
-} else {
-    SimpleSAML_Logger::debug('authinstagram : no code=' . var_export($_REQUEST, TRUE));
-
-    // TODO
-
-}
-
 // Find authentication source
 if (!array_key_exists(sspmod_authinstagram_Auth_Source_Instagram::AUTHID, $state)) {
     throw new SimpleSAML_Error_BadRequest('No data in state for ' . sspmod_authinstagram_Auth_Source_Instagram::AUTHID);
@@ -35,13 +22,20 @@ if ($source === NULL) {
     throw new SimpleSAML_Error_BadRequest('Could not find authentication source with id ' . var_export($sourceId, TRUE));
 }
 
-try {
-    if (isset($_REQUEST['error_reason']) && $_REQUEST['error_reason'] == 'user_denied') {
-        throw new SimpleSAML_Error_UserAborted();
+if (array_key_exists('code', $_REQUEST)) {
+    $state['authinstagram:verification_code'] = $_REQUEST['code'];
+} else {
+    if ($_REQUEST['error'] === 'access_denied' && $_REQUEST['error_reason'] === 'user_denied') {
+        $e = new SimpleSAML_Error_UserAborted();
+        SimpleSAML_Auth_State::throwException($state, $e);
     }
 
-    $source->finalStep($state);
+    $e = new SimpleSAML_Error_AuthSource($sourceId, 'Authentication failed: ['.$_REQUEST['error'].'] '.$_REQUEST['error_description']);
+    SimpleSAML_Auth_State::throwException($state, $e);
+}
 
+try {
+    $source->finalStep($state);
 } catch (SimpleSAML_Error_Exception $e) {
     SimpleSAML_Auth_State::throwException($state, $e);
 } catch (Exception $e) {
