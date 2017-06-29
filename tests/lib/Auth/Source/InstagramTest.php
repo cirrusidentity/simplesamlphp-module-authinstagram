@@ -17,23 +17,10 @@ class Test_sspmod_authinstagram_Auth_Source_Instagram extends PHPUnit_Framework_
         test::clean(); // remove all registered test doubles
     }
 
-    public function testAspectMockConfigured() {
-        // Ensure mocks can be configured for our service class
-        $linkDouble = test::double('sspmod_authinstagram_Auth_Source_Instagram', [
-            'authenticate' => null,
-        ]);
-        $info = ['AuthId' => 'instagram'];
-        $config = ['client_id' => 'example_id', 'client_secret' => 'example_secret'];
-        $state = ['SimpleSAML_Auth_Default.id' => 'authinstagram'];
-        (new sspmod_authinstagram_Auth_Source_Instagram($info, $config))->authenticate($state);
-        // Verify it was invoked with the expected argument
-        $linkDouble->verifyInvokedOnce('authenticate', [$state]);
-    }
-
     public function testAuthenticate() {
         // Override redirect behavior
-        test::double('SimpleSAML\Utils\HTTP', [
-            'redirectTrustedURL' => function () {
+        test::double('SimpleSAML_Utilities', [
+            'redirect' => function () {
                 throw new sspmod_authinstagram_ArgumentCaptureException('redirect called', func_get_args());
             }
         ]);
@@ -60,7 +47,7 @@ class Test_sspmod_authinstagram_Auth_Source_Instagram extends PHPUnit_Framework_
     public function testFinalStep() {
         // Override fetch behavior
         $fetch_result = '{"access_token": "at123456", "user": {"id": "id123456", "username": "username", "profile_picture": "https://cdninstagram.com/t/123.jpg", "full_name": "My Name", "bio": "", "website": ""}}';
-        test::double('SimpleSAML\Utils\HTTP', ['fetch' => $fetch_result]);
+        test::double('SimpleSAML_Utilities', ['fetch' => $fetch_result]);
 
         $info = ['AuthId' => 'instagram'];
         $config = ['client_id' => 'example_id', 'client_secret' => 'example_secret'];
@@ -89,7 +76,7 @@ class Test_sspmod_authinstagram_Auth_Source_Instagram extends PHPUnit_Framework_
     public function testFinalStepNoAccessToken() {
         // Override fetch behavior
         $fetch_result = '{}';
-        test::double('SimpleSAML\Utils\HTTP', ['fetch' => $fetch_result]);
+        test::double('SimpleSAML_Utilities', ['fetch' => $fetch_result]);
 
         $info = ['AuthId' => 'instagram'];
         $config = ['client_id' => 'example_id', 'client_secret' => 'example_secret'];
@@ -101,6 +88,8 @@ class Test_sspmod_authinstagram_Auth_Source_Instagram extends PHPUnit_Framework_
         $instagram = new sspmod_authinstagram_Auth_Source_Instagram($info, $config);
 
         $instagram->finalStep($state);
+
+        $this->fail('Exception expected');
     }
 
     /**
@@ -110,7 +99,7 @@ class Test_sspmod_authinstagram_Auth_Source_Instagram extends PHPUnit_Framework_
     public function testFinalStepExpiredAccessToken() {
         // Override fetch behavior
         $fetch_result = '{"access_token": "at123456", "error":"some_error", "error_type":"OAuthAccessTokenException"}';
-        test::double('SimpleSAML\Utils\HTTP', ['fetch' => $fetch_result]);
+        test::double('SimpleSAML_Utilities', ['fetch' => $fetch_result]);
 
         $info = ['AuthId' => 'instagram'];
         $config = ['client_id' => 'example_id', 'client_secret' => 'example_secret'];
@@ -122,6 +111,8 @@ class Test_sspmod_authinstagram_Auth_Source_Instagram extends PHPUnit_Framework_
         $instagram = new sspmod_authinstagram_Auth_Source_Instagram($info, $config);
 
         $instagram->finalStep($state);
+
+        $this->fail('Exception expected');
     }
 
 }

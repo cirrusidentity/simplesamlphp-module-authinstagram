@@ -13,8 +13,6 @@ $kernel->init([
         $projectRoot . '/lib',
     ]
 ]);
-// AspectMock seems to have trouble with SSP's custom class loader. Explicitly load class names like 'ssp_modulename_*'.
-$kernel->loadFile($projectRoot . '/lib/Auth/Source/Instagram.php');
 
 // Symlink module into ssp vendor lib so that templates and urls can resolve correctly
 $linkPath = $projectRoot . '/vendor/simplesamlphp/simplesamlphp/modules/authinstagram';
