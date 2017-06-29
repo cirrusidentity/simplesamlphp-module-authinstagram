@@ -65,11 +65,11 @@ class sspmod_authinstagram_Auth_Source_Instagram extends SimpleSAML_Auth_Source 
             'state' => $stateID,
         );
 
-        $authorizeURL = \SimpleSAML\Utils\HTTP::addURLParameters(self::INSTAGRAM_AUTHORIZATION_ENDPOINT, $authorizeURLParams);
+        $authorizeURL =  SimpleSAML_Utilities::addURLParameter(self::INSTAGRAM_AUTHORIZATION_ENDPOINT, $authorizeURLParams);
 
         SimpleSAML_Logger::debug("authinstagram : redirecting to authorizeURL=$authorizeURL");
 
-        \SimpleSAML\Utils\HTTP::redirectTrustedURL($authorizeURL);
+         SimpleSAML_Utilities::redirect($authorizeURL);
     }
 
     /**
@@ -96,7 +96,7 @@ class sspmod_authinstagram_Auth_Source_Instagram extends SimpleSAML_Auth_Source 
             ),
         );
 
-        $result = \SimpleSAML\Utils\HTTP::fetch(self::INSTAGRAM_ACCESS_TOKEN_ENDPOINT, $context);
+        $result =  SimpleSAML_Utilities::fetch(self::INSTAGRAM_ACCESS_TOKEN_ENDPOINT, $context);
 
         $response = json_decode($result, true);
 
