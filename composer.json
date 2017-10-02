@@ -3,7 +3,7 @@
     "description": "SSP Module for Instagram as authentication source",
     "type": "simplesamlphp-module",
     "require": {
-        "simplesamlphp/composer-module-installer": "v1.1.5"
+        "simplesamlphp/composer-module-installer": "~1.0"
     },
     "require-dev": {
         "simplesamlphp/simplesamlphp": "~1.14",
