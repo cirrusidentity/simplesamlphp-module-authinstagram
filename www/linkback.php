@@ -1,5 +1,11 @@
 <?php
 
+$handler = new \SimpleSAML\Module\authoauth2\OAuth2ResponseHandler();
+if ($handler->canHandleResponse()) {
+    $handler->handleResponse();
+    return;
+}
+
 /**
  * Handle linkback() response from Instagram.
  */

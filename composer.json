@@ -3,10 +3,11 @@
     "description": "SSP Module for Instagram as authentication source",
     "type": "simplesamlphp-module",
     "require": {
-        "simplesamlphp/composer-module-installer": "~1.0"
+        "simplesamlphp/composer-module-installer": "~1.0",
+        "cirrusidentity/simplesamlphp-module-authoauth2": "^1.0"
     },
     "require-dev": {
-        "simplesamlphp/simplesamlphp": "~1.14",
+        "simplesamlphp/simplesamlphp": ">1.14",
         "phpunit/phpunit": "5.3.*",
         "codeception/aspect-mock": "*"
     }
